@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>तिरंगा तार — 80 Years of Freedom | Independence Day Wishes</title>
+<meta name="description" content="Create and share a personalised Independence Day postcard for India's 80th Independence Day. Add your name, pick a wish, seal it, and post it everywhere." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="तिरंगा तार — 80 Years of Freedom" />
+<meta property="og:description" content="Make your own Independence Day postcard in seconds. Jai Hind! 🇮🇳" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#12305C" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Hind:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ambient canvas: chakra-spoke light rays + drifting marigold/tricolor particles -->
+<canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ================= HEADER / MUSIC / SHARE TOOLBAR ================= -->
+<header class="toolbar">
+  <div class="toolbar__mark">
+    <svg class="mark-chakra" viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="20" cy="20" r="2.6" fill="currentColor"/>
+      <g id="mark-spokes"></g>
+    </svg>
+    <span>तिरंगा तार</span>
+  </div>
+  <button id="music-toggle" class="toolbar__btn" type="button" aria-pressed="false">
+    <svg class="icon-note" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    <span class="toolbar__btn-label">Play BGM</span>
+  </button>
+</header>
+
+<div id="audio-toast" class="audio-toast" role="status" hidden></div>
+
+<!-- ================= HERO ================= -->
+<main>
+<section class="hero">
+  <div class="hero__flag-wrap">
+    <svg id="flag" class="flag" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" aria-label="Waving flag of India">
+      <defs>
+        <filter id="wave" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence id="turb" type="turbulence" baseFrequency="0.010 0.03" numOctaves="2" seed="7" result="noise">
+            <animate attributeName="baseFrequency" dur="9s" values="0.010 0.03;0.014 0.02;0.010 0.03" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <clipPath id="flagClip"><rect x="20" y="20" width="480" height="320" rx="4"/></clipPath>
+      </defs>
+      <g filter="url(#wave)">
+        <g clip-path="url(#flagClip)">
+          <rect x="20" y="20" width="480" height="106.6" fill="#FF9933"/>
+          <rect x="20" y="126.6" width="480" height="106.8" fill="#F3E9D2"/>
+          <rect x="20" y="233.4" width="480" height="106.6" fill="#0C7C3F"/>
+          <g id="hero-chakra" transform="translate(260,180)">
+            <circle r="34" fill="none" stroke="#12305C" stroke-width="3.4"/>
+            <circle r="4.6" fill="#12305C"/>
+            <g id="hero-spokes"></g>
+          </g>
+        </g>
+        <rect x="4" y="16" width="10" height="332" fill="#6b4a2b"/>
+      </g>
+    </svg>
+  </div>
+
+  <p class="eyebrow">15 August 2026 &nbsp;·&nbsp; 79 years free, 80th flag hoisted</p>
+  <h1 class="headline">
+    <span class="headline__hi">आज़ादी का जश्न</span>
+    <span class="headline__en">Eighty Years of the Flag</span>
+  </h1>
+  <p class="hero__sub">Yuva Shakti for Viksit Bharat — write a wish, seal it like an old telegram, and send it into the world today.</p>
+  <a href="#compose" class="cta">Compose your postcard ↓</a>
+</section>
+
+<!-- ================= COMPOSER ================= -->
+<section id="compose" class="composer">
+  <div class="composer__panel">
+    <label class="field">
+      <span class="field__label">Your name <em>(or who it's for)</em></span>
+      <input id="name-input" type="text" maxlength="28" placeholder="e.g. Aditi, Team Bengaluru, Nana ji…" autocomplete="off" />
+    </label>
+
+    <div class="field">
+      <span class="field__label">The wish</span>
+      <div class="quote-box" id="quote-box">
+        <p id="quote-text">Loading…</p>
+        <cite id="quote-attr"></cite>
+      </div>
+      <button id="shuffle-btn" class="ghost-btn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h4l3 4 4-8h7M3 17h4l3-4m4 8h7M17 4l3 3-3 3M17 17l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Shuffle wish
+      </button>
+    </div>
+
+    <div class="field field--format">
+      <span class="field__label">Postcard shape</span>
+      <div class="format-row" id="format-row">
+        <button class="format-chip is-active" data-format="post" type="button">Feed · 1:1</button>
+        <button class="format-chip" data-format="portrait" type="button">Post · 4:5</button>
+        <button class="format-chip" data-format="story" type="button">Story · 9:16</button>
+      </div>
+    </div>
+
+    <button id="seal-btn" class="seal-btn" type="button">
+      <span class="seal-btn__stamp" aria-hidden="true">
+        <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="2.4" stroke-dasharray="3 3"/><circle cx="30" cy="30" r="6" fill="currentColor"/></svg>
+      </span>
+      Seal my postcard
+    </button>
+    <p class="composer__hint" id="composer-hint">Press seal to stamp the postmark, then download or share it anywhere.</p>
+  </div>
+
+  <!-- ============ POSTCARD PREVIEW (live DOM, mirrors canvas render) ============ -->
+  <div class="postcard-stage">
+    <div id="postcard" class="postcard postcard--post">
+      <div class="postcard__texture" aria-hidden="true"></div>
+      <svg class="postcard__watermark" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="82" fill="none" stroke="#12305C" stroke-width="2"/>
+        <circle cx="100" cy="100" r="9" fill="#12305C"/>
+        <g id="watermark-spokes"></g>
+      </svg>
+
+      <div class="postcard__stripe postcard__stripe--top"></div>
+      <div class="postcard__stripe postcard__stripe--bottom"></div>
+
+      <div class="postcard__stamp-corner">
+        <svg viewBox="0 0 90 110" aria-hidden="true">
+          <rect x="4" y="4" width="82" height="102" fill="#F3E9D2" stroke="#2A1F14" stroke-width="1.5" stroke-dasharray="2.4 2.4"/>
+          <rect x="12" y="12" width="66" height="42" fill="#FF9933"/>
+          <rect x="12" y="54" width="66" height="14" fill="#F3E9D2"/>
+          <rect x="12" y="68" width="66" height="30" fill="#0C7C3F"/>
+          <circle cx="45" cy="61" r="7" fill="none" stroke="#12305C" stroke-width="1.3"/>
+        </svg>
+      </div>
+
+      <div class="postcard__body">
+        <p class="postcard__kicker">भारत — INDIA</p>
+        <h2 class="postcard__headline">Happy 80th<br/>Independence Day</h2>
+        <p class="postcard__to" id="pc-name">Jai Hind, Friend</p>
+        <p class="postcard__quote" id="pc-quote">Freedom in the mind, faith in the words, pride in our souls.</p>
+        <p class="postcard__attr" id="pc-attr">— Rabindranath Tagore</p>
+      </div>
+
+      <div class="postcard__postmark" id="postmark">
+        <svg viewBox="0 0 140 140" aria-hidden="true">
+          <circle cx="70" cy="70" r="62" fill="none" stroke="#A6192E" stroke-width="3"/>
+          <circle cx="70" cy="70" r="52" fill="none" stroke="#A6192E" stroke-width="1.4"/>
+          <path id="postmark-arc-top" d="M 20 70 A 50 50 0 0 1 120 70" fill="none"/>
+          <path id="postmark-arc-bottom" d="M 120 70 A 50 50 0 0 1 20 70" fill="none"/>
+          <text font-family="'Space Mono', monospace" font-size="11.5" fill="#A6192E" letter-spacing="2">
+            <textPath href="#postmark-arc-top" startOffset="50%" text-anchor="middle">TIRANGA TAAR</textPath>
+          </text>
+          <text font-family="'Space Mono', monospace" font-size="11.5" fill="#A6192E" letter-spacing="2">
+            <textPath href="#postmark-arc-bottom" startOffset="50%" text-anchor="middle">15 · AUG · 2026</textPath>
+          </text>
+          <text x="70" y="76" text-anchor="middle" font-family="'Space Mono', monospace" font-size="15" fill="#A6192E" font-weight="700">JAI HIND</text>
+        </svg>
+      </div>
+
+      <p class="postcard__footer">#HarGharTiranga · India @ 80</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACTIONS ================= -->
+<section class="actions">
+  <button id="download-btn" class="cta cta--solid" type="button" disabled>Download image</button>
+  <button id="share-btn" class="cta cta--ghost" type="button" disabled>Share</button>
+  <canvas id="render-canvas" hidden></canvas>
+  <p class="actions__note">Seal your postcard first — then it's ready for Instagram, WhatsApp Status, or anywhere else. 🇮🇳</p>
+</section>
+
+<footer class="site-footer">
+  <p>Made with tricolour pride for India's 80th Independence Day. Jai Hind! 🇮🇳</p>
+</footer>
+</main>
+
+<audio id="bgm" loop preload="none">
+  <source src="assets/audio/bgm.mp3" type="audio/mpeg" />
+</audio>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+Add your background music file here and name it exactly:
+
+    bgm.mp3
+
+The app looks for assets/audio/bgm.mp3 automatically. Use a track you have
+the rights to use (a licensed copy, a royalty-free patriotic instrumental,
+or your own recording). Until a file is added, the "Play BGM" button falls
+back to a short original ambient drone generated in the browser.
