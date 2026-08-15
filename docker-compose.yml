@@ -1,0 +1,8 @@
+services:
+  tiranga-taar:
+    build: .
+    image: tiranga-taar:latest
+    container_name: tiranga-taar
+    restart: unless-stopped
+    ports:
+      - "80:80"
